@@ -18,6 +18,7 @@ public class MainActivity extends Activity implements View.OnClickListener
     private EditText input;
     private Button hello;
     private Button helloAll;
+    private Greeter greeter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,6 +33,7 @@ public class MainActivity extends Activity implements View.OnClickListener
         helloAll = viewById(R.id.hello_all);
         helloAll.setOnClickListener(this);
 
+        greeter = new Greeter();
     }
 
     @SuppressWarnings("unchecked")
@@ -55,11 +57,12 @@ public class MainActivity extends Activity implements View.OnClickListener
 
     private void sayHelloToAll()
     {
-        //TODO: Implement
+        text.setText(greeter.greetAllFriends());
     }
 
     private void sayHello()
     {
-        text.setText("Hello, " + input.getText());
+        String greeting = greeter.sayHello(input.getText().toString());
+        text.setText(greeting);
     }
 }
