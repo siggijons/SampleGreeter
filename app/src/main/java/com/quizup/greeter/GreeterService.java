@@ -1,9 +1,11 @@
 package com.quizup.greeter;
 
+import rx.Observable;
+
 /**
  * @author siggijons
  */
 public interface GreeterService
 {
-    String sayHello(String name);
+    Observable<String> sayHello(String name);
 }

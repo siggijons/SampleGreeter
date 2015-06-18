@@ -1,7 +1,6 @@
 package com.quizup.greeter;
 
-import java.util.Arrays;
-import java.util.List;
+import rx.Observable;
 
 /**
  * @author siggijons
@@ -9,9 +8,9 @@ import java.util.List;
 public class DroidFriendService implements FriendService
 {
     @Override
-    public List<String> getFriends()
+    public Observable<String> getFriends()
     {
-        return Arrays.asList(
+        return Observable.just(
                 "C-3PO",
                 "R2-D2",
                 "IG-88",

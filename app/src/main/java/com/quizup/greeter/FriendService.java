@@ -1,11 +1,11 @@
 package com.quizup.greeter;
 
-import java.util.List;
+import rx.Observable;
 
 /**
  * @author siggijons
  */
 public interface FriendService
 {
-    List<String> getFriends();
+    Observable<String> getFriends();
 }

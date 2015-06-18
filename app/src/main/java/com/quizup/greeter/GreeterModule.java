@@ -2,6 +2,8 @@ package com.quizup.greeter;
 
 import dagger.Module;
 import dagger.Provides;
+import rx.Scheduler;
+import rx.schedulers.Schedulers;
 
 /**
  * @author siggijons
@@ -10,9 +12,9 @@ import dagger.Provides;
 public class GreeterModule
 {
     @Provides
-    Greeter provideGreeter(GreeterService greeterService, FriendService friendService)
+    Greeter provideGreeter(GreeterService greeterService, FriendService friendService, Scheduler scheduler)
     {
-        return new Greeter(greeterService, friendService);
+        return new Greeter(greeterService, friendService, scheduler);
     }
 
     @Provides
@@ -25,6 +27,12 @@ public class GreeterModule
     FriendService provideFriendService()
     {
         return new DroidFriendService();
+    }
+
+    @Provides
+    Scheduler provideComputationScheduler()
+    {
+        return Schedulers.computation();
     }
 
 }

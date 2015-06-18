@@ -1,15 +1,18 @@
 package com.quizup.greeter;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import dagger.ObjectGraph;
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 import javax.inject.Inject;
 
@@ -40,7 +43,6 @@ public class MainActivity extends Activity implements View.OnClickListener
         hello.setOnClickListener(this);
         helloAll = viewById(R.id.hello_all);
         helloAll.setOnClickListener(this);
-//        greeter = new Greeter();
     }
 
     @SuppressWarnings("unchecked")
@@ -64,12 +66,57 @@ public class MainActivity extends Activity implements View.OnClickListener
 
     private void sayHelloToAll()
     {
-        text.setText(greeter.greetAllFriends());
+        text.setText(null);
+        greeter.greetAllFriends()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>()
+                {
+                    @Override
+                    public void onCompleted()
+                    {
+                        text.append("onCompleted");
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e)
+                    {
+                        text.append("onError: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String s)
+                    {
+                        Log.i("SJ", "onNext: " + s);
+                        text.append(s + "\n");
+                    }
+                });
     }
 
     private void sayHello()
     {
-        String greeting = greeter.sayHello(input.getText().toString());
-        text.setText(greeting);
+        text.setText(null);
+        Observable.just(input.getText().toString()).flatMap(new Func1<String, Observable<String>>()
+        {
+            @Override
+            public Observable<String> call(String s)
+            {
+                return greeter.sayHello(s);
+            }
+        }).subscribe(new Action1<String>()
+        {
+            @Override
+            public void call(String s)
+            {
+                text.append(s);
+            }
+        }, new Action1<Throwable>()
+        {
+            @Override
+            public void call(Throwable e)
+            {
+                text.setText("Error: " + e);
+            }
+        });
     }
 }
