@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import dagger.ObjectGraph;
+
+import javax.inject.Inject;
 
 
 public class MainActivity extends Activity implements View.OnClickListener
@@ -18,12 +21,17 @@ public class MainActivity extends Activity implements View.OnClickListener
     private EditText input;
     private Button hello;
     private Button helloAll;
-    private Greeter greeter;
+
+    @Inject
+    Greeter greeter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        ObjectGraph.create(new GreeterModule()).inject(this);
+
         setContentView(R.layout.activity_main);
 
         text = viewById(R.id.text);
@@ -32,8 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener
         hello.setOnClickListener(this);
         helloAll = viewById(R.id.hello_all);
         helloAll.setOnClickListener(this);
-
-        greeter = new Greeter();
+//        greeter = new Greeter();
     }
 
     @SuppressWarnings("unchecked")

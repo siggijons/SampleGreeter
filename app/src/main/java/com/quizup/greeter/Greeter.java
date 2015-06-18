@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class Greeter
 {
-    private GreeterService greeterService;
-    private FriendService friendService;
+    private final GreeterService greeterService;
+    private final FriendService friendService;
 
-    public Greeter()
+    public Greeter(GreeterService greeterService, FriendService friendService)
     {
-        this.greeterService = new SyncGreeterService();
-        this.friendService = new DroidFriendService();
+        this.greeterService = greeterService;
+        this.friendService = friendService;
     }
 
     public String sayHello(String name)
