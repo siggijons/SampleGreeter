@@ -1,7 +1,6 @@
 package com.quizup.greeter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,27 +9,18 @@ import java.util.List;
  */
 public class Greeter
 {
-    public String sayHello(String name)
+    private GreeterService greeterService;
+    private FriendService friendService;
+
+    public Greeter()
     {
-        return "Hello, " + name;
+        this.greeterService = new SyncGreeterService();
+        this.friendService = new DroidFriendService();
     }
 
-    public String greetAllFriends()
+    public String sayHello(String name)
     {
-        StringBuilder sb = new StringBuilder();
-        for (Iterator<String> iterator = sayHello(getFriends()).iterator(); iterator.hasNext(); )
-        {
-            String s = iterator.next();
-            sb.append(s);
-
-            if (iterator.hasNext())
-            {
-                sb.append("\n");
-            }
-        }
-
-        return sb.toString();
-
+        return greeterService.sayHello(name);
     }
 
     protected List<String> sayHello(List<String> friends)
@@ -45,14 +35,23 @@ public class Greeter
         return result;
     }
 
-    protected List<String> getFriends()
+    public String greetAllFriends()
     {
-        return Arrays.asList(
-                "C-3PO",
-                "R2-D2",
-                "IG-88",
-                "4LOM"
-        );
+        StringBuilder sb = new StringBuilder();
+        List<String> friends = friendService.getFriends();
+        for (Iterator<String> iterator = sayHello(friends).iterator(); iterator.hasNext(); )
+        {
+            String s = iterator.next();
+            sb.append(s);
+
+            if (iterator.hasNext())
+            {
+                sb.append("\n");
+            }
+        }
+
+        return sb.toString();
+
     }
 
 }
